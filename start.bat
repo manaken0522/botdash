@@ -1,3 +1,3 @@
 @echo off
-npm run
+npm start
 pause
