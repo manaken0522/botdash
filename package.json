@@ -1,0 +1,26 @@
+{
+  "name": "botdash",
+  "version": "1.0.0",
+  "description": "discord bot web dashboard",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manaken0522/botdash.git"
+  },
+  "keywords": [
+    "discordbot"
+  ],
+  "author": "manaken0522",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/manaken0522/botdash/issues"
+  },
+  "homepage": "https://github.com/manaken0522/botdash#readme",
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "express": "^4.18.2"
+  }
+}

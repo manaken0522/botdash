@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bot Dashboard</title>
+    <script>
+        const xhr = new XMLHttpRequest();
+
+        xhr.open('GET', './api/botinfo')
+        
+        xhr.onload = () => {
+            const botinfo_element =  document.body.getElementsByClassName('botinfo')[0];
+
+            if(xhr.readyState === xhr.DONE) {
+                if(xhr.status === 200) {
+                    if(xhr.responseURL.includes('/api/botinfo')) {
+                        const botinfo = JSON.parse(xhr.responseText);
+                        botinfo_element.appendChild(document.createTextNode(`ユーザー数: ${botinfo['user_count']}`));
+                        botinfo_element.appendChild(document.createElement('br'));
+                        botinfo_element.appendChild(document.createTextNode(`サーバー数: ${botinfo['guild_count']}`));
+                        const guilds_element = document.createElement('div');
+                        botinfo['guilds'].forEach(guild => {
+                            const guild_element = document.createElement('div');
+                            guild_element.appendChild(document.createTextNode(`${guild['name']}(${guild['id']})`));
+                            guild_element.appendChild(document.createTextNode(`メンバー数:${guild['member_count']}`));
+                            guilds_element.appendChild(guild_element);
+                        });
+                        botinfo_element.appendChild(guilds_element);
+                    }
+                }
+            }
+        }
+
+        xhr.send()
+
+        function change_status(status) {
+            xhr.open('PUT', `./api/status/${status}`);
+            xhr.send();
+        }
+
+        function send_activity() {
+            const activity_element = document.body.getElementsByClassName('activity');
+
+            xhr.open('PUT', './api/activity');
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.send(`activity=${activity_element[0]['value']}`);
+        }
+    </script>
+</head>
+<body>
+    <h1>Bot Dashboard</h1>
+    <div class="botinfo"></div>
+    <h2>ステータス</h2>
+    <button onclick="change_status('online');">オンライン</button>
+    <button onclick="change_status('idle');">退席中</button>
+    <button onclick="change_status('dnd');">取り込み中</button>
+    <button onclick="change_status('invisible');">オフライン</button>
+    <h2>アクティビティ</h2>
+    <input type="text" class="activity" style="width: 250px;">
+    <button onclick="send_activity();">送信</button>
+</body>
+</html>
